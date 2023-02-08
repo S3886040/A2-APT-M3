@@ -30,6 +30,12 @@ private:
 
     Player* player1;
     Player* player2;
+    // Added for milestone 3
+    Player* player3;
+    Player* player4;
+    int playerTurnCount;
+    int numPlayers;
+    //
     Player* activePlayer;
     TileBag* tileBag;
     RulesEngine* re;
@@ -80,8 +86,11 @@ public:
      * When user input is received it will check input against nameChecker function
      * and continue to prompt if requirements not met.
      * When met player name varibale in the player will be updated.
+     * 
+     * @param playerNumber depending on player number, object member variable will be assigned 
+     * to have the new player name
     */
-    void getPlayerName(Player* player, int playerNumber);
+    void getPlayerName(int playerNumber);
 
     /**
      * @brief holds main game play loop
@@ -101,6 +110,14 @@ public:
      * Offers some validation chacks to prevent against program crash from false input.
      * 
     */
+
+    /**
+     * @brief Will analyse the board, and decide which move will receive the most points. Then play move.
+     *
+     * 
+     * 
+    */
+    void AIMove();
     void loadGame();
 
     /**
@@ -216,6 +233,15 @@ public:
      * @returns string that was passed without whitespaces
     */
     std::string TrimFunction(std::string str);
+
+    /**
+     * @brief Accepts a reference to a string, splits at comma value
+     * 
+     * @param str string value to be split
+     * 
+     * @returns vector of string values
+    */
+    std::vector<std::string> splitString(const std::string &str);
 
     /**
      * @brief Checks name input

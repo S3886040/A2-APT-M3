@@ -23,6 +23,10 @@ GamesEngine::GamesEngine() {
     this->re = new RulesEngine(this);
     this->player1 = new Player("");
     this->player2 = new Player("");
+    // Added for milestone 3
+    this->player3 = new Player("");
+    this->player4 = new Player("");
+    this->playerTurnCount = 1;
     this->activePlayer = this->player1;
     this->tileBag = nullptr;
 
@@ -37,8 +41,6 @@ GamesEngine::GamesEngine() {
         }
     }
 
-    // Populating player tiles with tilebag values
-    dealGame();
     // initalising Member values to a minimal starting point
     this->boardShape = {26, 26};
     this->quitGame = false;
@@ -61,7 +63,7 @@ GamesEngine::~GamesEngine() {
 void GamesEngine::mainMenu() {
 
     // Initial Game loop
-    while (this->quitGame == false && !re->isGameOver()) {
+    while (this->quitGame == false) {
 
         // Print menu options
         std::cout << "\nMenu" << std::endl;
@@ -80,14 +82,32 @@ void GamesEngine::mainMenu() {
         // Option 1 is newgame
         if (menuSelection == "1") {
 
-            // Get names of players
-            getPlayerName(player1, 1);
-            if(!quitGame){
-                getPlayerName(player2, 2);
-                if(!quitGame){
-                    playGame();
+            bool goodInput = false;
+            while(!goodInput) {
+                std::cout << "Enter the number of players (2-4):" << std::endl;
+  
+                std::string numPlayers = getUserInput();
+                try {
+                    this->numPlayers = std::stoi(numPlayers);
+                } catch (const std::invalid_argument& e) {
+                    std::cout << "Please enter a number, that wasn't a number." << std::endl;
+                } 
+
+                if(this->numPlayers < 2 || this->numPlayers > 4) {
+                    std::cout << "Please enter a number between 2 and 4." << std::endl;
+                } else {
+                    for (int i = 1; i <= this->numPlayers; i++)
+                    {
+                        getPlayerName(i);
+                    }
+                    goodInput = true;
                 }
             }
+
+            // Populating player tiles with tilebag values
+            dealGame();
+            // Initiate gameplay
+            playGame();
         // Option 2 is loadgame
         } else if (menuSelection == "2") {
 
@@ -130,6 +150,8 @@ void GamesEngine::mainMenu() {
                 std::cout << "\nInvalid selection. Please enter a selection from 1 to 4" << std::endl;
             }
         }
+
+        this->quitGame = re->isGameOver();
     }
 }
 
@@ -150,7 +172,25 @@ void GamesEngine::playGame() {
     }
 }
 
+void GamesEngine::AIMove() {
+    // Loop thorugh board and decide which moves are possible with the current hand
+    // Check all current tiles in hand against re->validmove. If validMove save into vector.
 
+    // Loop through all valid move and decide which move will score the most points. Then play move.
+
+
+
+}
+
+std::vector<std::string> splitString(const std::string &str) {
+    std::vector<std::string> moves;
+    std::string move;
+    std::istringstream tokenStream(str);
+    while (std::getline(tokenStream, move, ',')) {
+        moves.push_back(move);
+    }
+    return moves;
+}
 
 void GamesEngine::playerTurn(Player* activePlayer){
 
@@ -158,6 +198,7 @@ void GamesEngine::playerTurn(Player* activePlayer){
     std::cout << "\nYour hand is" << std::endl;
     this->activePlayer->printAllTiles();
 
+    
     // continue to prompt player for move until a valid command is entered
     bool validCommand = false;
     while(!validCommand && !quitGame)
@@ -399,7 +440,7 @@ std::string GamesEngine::getUserInput() {
     return userInput;
 }
 
-void GamesEngine::getPlayerName(Player* player, int playerNumber){
+void GamesEngine::getPlayerName(int playerNumber){
 
     std::cout << "\nEnter player " << playerNumber << " name (UPPERCASE LETTERS ONLY):" << std::endl;
 
@@ -411,9 +452,15 @@ void GamesEngine::getPlayerName(Player* player, int playerNumber){
         std::cout << "\nEnter player " << playerNumber << " name (UPPERCASE LETTERS ONLY):" << std::endl;
         playerName = getUserInput();
     }
-
-    //If name is valid setPlayer name
-    player->setPlayerName(playerName);
+    if(playerNumber == 1) {
+        this->player1->setPlayerName(playerName);
+    } else if (playerNumber == 2) {
+        this->player2->setPlayerName(playerName);
+    } else if (playerNumber == 3) {
+        this->player3->setPlayerName(playerName);
+    } else if (playerNumber == 4) {
+        this->player4->setPlayerName(playerName);
+    }
 }
 
 std::string GamesEngine::TrimFunction(std::string str)
@@ -638,11 +685,30 @@ void GamesEngine::quit() {
 }
 
 void GamesEngine::updateActivePlayer() {
-    if (this->activePlayer == player1) {
-        this->activePlayer = player2;
-    } else {
+    this->playerTurnCount += 1;
+    if(this->playerTurnCount == 1) {
         this->activePlayer = player1;
+
+    } else if(this->playerTurnCount == 2) {
+        this->activePlayer = player2;
+
+    } else if(this->playerTurnCount == 3 && this->numPlayers > 2) {
+            this->activePlayer = player3;
+            if(this->numPlayers == 3) {
+                this->playerTurnCount = 0;
+            }
+    } else if(this->playerTurnCount == 4 && this->numPlayers > 3) {
+        this->activePlayer = player4;
+        this->playerTurnCount = 0;
     }
+
+
+
+    // if (this->activePlayer == player1) {
+    //     this->activePlayer = player2;
+    // } else {
+    //     this->activePlayer = player1;
+    // }
 }
 
 void GamesEngine::placeTile(int x, int y, Tile* tileValue) {
@@ -691,6 +757,12 @@ void GamesEngine::printGameStatus() {
 void GamesEngine::dealGame() {
     this->player1->drawTiles(this->tileBag, 6);
     this->player2->drawTiles(this->tileBag, 6);
+    if(this->numPlayers >= 3) {
+        this->player3->drawTiles(this->tileBag, 6);
+    } 
+    if(this->numPlayers == 4) {
+        this->player4->drawTiles(this->tileBag, 6);
+    }  
 }
 
 void GamesEngine::printGameResult() {
