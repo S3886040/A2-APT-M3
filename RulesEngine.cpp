@@ -227,20 +227,20 @@ bool RulesEngine::isValidMove(const BoardLocation &location) const {
         //If it is valid - add points to the players score accordingly
     } else {
 
-        ge->getCurrentPlayer()->setPlayerScore(
-                ge->getCurrentPlayer()->getPlayerScore() + verticalLine.size() + horizontalLine.size());
+        // ge->getCurrentPlayer()->setPlayerScore(
+        //         ge->getCurrentPlayer()->getPlayerScore() + verticalLine.size() + horizontalLine.size());
 
-        //Check for Qwirkle
-        if (verticalLine.size() == 6) {
-            ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
-            std::cout << "QWIRKLE!!!" << std::endl;
-        }
+        // //Check for Qwirkle
+        // if (verticalLine.size() == 6) {
+        //     ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
+        //     std::cout << "QWIRKLE!!!" << std::endl;
+        // }
 
-        //Check for Qwirkle
-        if (horizontalLine.size() == 6) {
-            ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
-            std::cout << "QWIRKLE!!!" << std::endl;
-        }
+        // //Check for Qwirkle
+        // if (horizontalLine.size() == 6) {
+        //     ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
+        //     std::cout << "QWIRKLE!!!" << std::endl;
+        // }
 
 
         isValid = true;
@@ -250,6 +250,39 @@ bool RulesEngine::isValidMove(const BoardLocation &location) const {
     return isValid;
 
 }
+
+int RulesEngine::calculateScores(const BoardLocation &location) {
+    int score = 0;
+    std::vector<Tile *> horizontalLine, verticalLine;
+
+    Tile *tile = new Tile(location.getTile().colour, location.getTile().shape);
+
+    //Check vertical and store in vector
+    verticalLine = hasVertical(location);
+
+    //Check horizontal and store in vector
+    horizontalLine = hasHorizontal(location);
+
+    //If there is > 1 in the line - add the current tile to the line so that it can be validated
+    if (horizontalLine.size() >= 1) { horizontalLine.push_back(tile); };
+
+    //If there is > 1 in the line - add the current tile to the line so that it can be validated
+    if (verticalLine.size() >= 1) { verticalLine.push_back(tile); };
+
+    score = verticalLine.size() + horizontalLine.size();
+
+    //Check for Qwirkle
+    if (verticalLine.size() == 6) {
+        score += 6;
+    }
+
+    //Check for Qwirkle
+    if (horizontalLine.size() == 6) {
+        score += 6;
+    }
+
+    return score;
+};
 
 std::vector<Tile *>  RulesEngine::hasVertical(const BoardLocation &location) const {
 

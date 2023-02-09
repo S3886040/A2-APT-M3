@@ -21,6 +21,7 @@ public:
     // Copy constructor
     BoardLocation(const BoardLocation &other);
 
+    void setScore(int score);
     // Get the row of the location
     int row() const;
 
@@ -36,6 +37,9 @@ public:
     // Get the column position
     int getCol() const;
 
+    // Get the score
+    int getScore() const;
+
     // Get the row position
     int getRow() const;
 
@@ -43,6 +47,7 @@ private:
     int x;
     int y;
     Tile boardTile;
+    int score;
 };
 
 #endif //A2_APT_BOARDLOCATION_H

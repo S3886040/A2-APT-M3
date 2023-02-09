@@ -138,6 +138,8 @@ public:
      */
     std::vector<Tile *> hasHorizontal(const BoardLocation &location) const;
 
+    int calculateScores(const BoardLocation &location);
+
     private:
     // Pointer to the games engine
     GamesEngine *ge;

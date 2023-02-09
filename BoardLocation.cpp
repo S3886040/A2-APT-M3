@@ -6,18 +6,24 @@
 BoardLocation::BoardLocation(int column, int row) {
     x = row;
     y = column;
+    score = 0;
 }
 
 BoardLocation::BoardLocation(int column, int row, Tile tile) {
     x = row;
     y = column;
     boardTile = tile;
+    score = 0;
 }
 
 BoardLocation::BoardLocation(const BoardLocation &other) {
     y = other.y;
     x = other.x;
     boardTile = other.boardTile;
+}
+
+void BoardLocation::setScore(int score) {
+    this->score = score;
 }
 
 int BoardLocation::row() const {
@@ -39,6 +45,11 @@ const Tile BoardLocation::getTile() const {
 int BoardLocation::getCol() const {
 
     return this->x;
+}
+
+int BoardLocation::getScore() const {
+
+    return this->score;
 }
 
 int BoardLocation::getRow() const {
