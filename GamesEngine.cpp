@@ -72,7 +72,7 @@ GamesEngine::GamesEngine(std::string arg) {
     }
 
     // initalising Member values to a minimal starting point
-    this->boardShape = {26, 26};
+    this->boardShape = {12, 12};
     this->quitGame = false;
     this->moveNumber = 0;
 }
