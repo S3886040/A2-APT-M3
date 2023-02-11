@@ -44,7 +44,7 @@ GamesEngine::GamesEngine() {
     }
 
     // initalising Member values to a minimal starting point
-    this->boardShape = {8, 8};
+    this->boardShape = {12, 12};
     this->quitGame = false;
     this->moveNumber = 0;
 }
@@ -498,7 +498,22 @@ void GamesEngine::playerTurn(Player* activePlayer){
                                     this->activePlayer->drawTiles(tileBag, 1);
                                 }
 
+                                // Milestone 3 improvement, board shape will be expanded depending user placement of tiles on board.
+                                if(move.getRow() == boardShape[1] - 1 || (move.getRow() > boardShape[1] && move.getRow() < 26)) {
+                                    if(move.getRow() == 25) {
+                                        boardShape[1] = 26;
+                                    } else {
+                                        boardShape[1] = move.getRow() + 2;
+                                    }
+                                } 
                                 
+                                if(move.getCol() == boardShape[0] - 1 || (move.getCol() > boardShape[0] && move.getCol() < 26)) {
+                                    if(move.getCol() == 25) {
+                                        boardShape[0] = 26;
+                                    } else {
+                                        boardShape[0] = move.getCol() + 2;
+                                    }
+                                }
 
                                 // If the move is valid, switch to the next player
                                 updateActivePlayer();
@@ -936,17 +951,31 @@ BoardLocation& GamesEngine::convertStringToMove(std::string input) {
 
 void GamesEngine::printBoard() {
 
+    // Function has been improved for Milestone 3, expansion of board is now dynamic
     // Print header row
     std::cout << " ";
-    for (int i = 0; i < 10; i++) {
+    if(boardShape[1] < 10) {
+        for (int i = 0; i < boardShape[1]; i++) {
         std::cout << "  " << i;
-    }
-    for (int i = 10; i < 26; i++) {
+        }
+    } else {
+        for (int i = 0; i < 10; i++) {
+        std::cout << "  " << i;
+        }
+        for (int i = 10; i < boardShape[1]; i++) {
         std::cout << " " << i;
+        }
+    }
+    
+    
+    std::cout << std::endl;
+    std::cout << "--";
+    for (int i = 0; i < boardShape[1]; i++)
+    {
+        std::cout << "---";
     }
     std::cout << std::endl;
-    std::cout << "--------------------------------------------------------------------------------" << std::endl;
-
+    
     // Print board
     for (int row = 0; row < this->boardShape[0]; row++) {
         // Print row index
