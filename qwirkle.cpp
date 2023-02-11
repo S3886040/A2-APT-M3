@@ -3,6 +3,8 @@
 #include "GamesEngine.h"
 #include "Player.h"
 #include <iostream>
+#include <sstream>
+#include <string.h>
 
 #define EXIT_SUCCESS    0
 
@@ -15,18 +17,33 @@ void testLinkedList();
    * Main method, creates our game engine and initiates gameplay
    * Deletes games engine on close
    * 
-   * @param void colour of tile to be defined
+   * @param argc
+   * @param argv
    */
-int main(void) {
+int main(int argc, char** argv) {
    
    std::cout << "Welcome to Qwirkle!" << std::endl;
    std::cout << "-------------------" << std::endl;
+   std::string argS;
+   std::stringstream ss;
+   ss << argv[1];
+   ss >> argS;
 
-   // Games engine will run game loop and game logic
-   GamesEngine* engine = new GamesEngine();
-   // Main menu method holds gameplay loop
-   engine->mainMenu();
-
+   GamesEngine* engine = nullptr;
+   if(argS == "--ai") {
+      GamesEngine* engine = new GamesEngine(argS);
+      engine->getPlayerName(1);
+      // Populating player tiles with tilebag values
+      engine->dealGame();
+      // Initiate gameplay
+      engine->playGame();
+   } else {
+      // Games engine will run game loop and game logic
+      GamesEngine* engine = new GamesEngine();
+      // Main menu method holds gameplay loop
+      engine->mainMenu();
+   }
+   
    // Cleanup
    delete engine;
 

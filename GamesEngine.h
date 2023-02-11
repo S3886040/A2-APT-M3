@@ -55,6 +55,17 @@ public:
     GamesEngine();
 
     /**
+     * @brief Constructor
+     *
+     * Initializes the games engine.
+     * Sets member variables to null or empty values.
+     * Populates TileBag with tiles and initialises board Vector.
+     * 
+     * @param can be given an argument that will define the gameplay
+    */
+    GamesEngine(std::string arg);
+
+    /**
      * @brief deconstructor
      *
      * Deletes object member variables stored on the heap.

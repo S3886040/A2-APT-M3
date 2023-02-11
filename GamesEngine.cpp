@@ -28,6 +28,35 @@ GamesEngine::GamesEngine() {
     this->player3 = new Player("");
     this->player4 = new Player("");
     this->playerTurnCount = 1;
+    this->numPlayers = 0;
+    this->activePlayer = this->player1;
+    this->tileBag = nullptr;
+
+    // Populating the tilebag with tiles
+    generateRandomTiles();
+
+    // Intialises the board vector to 27 to accomidate the edges of the board
+    this->board = std::vector<std::vector<Tile *> >(27, std::vector<Tile *>(27));
+    for (int row = 0; row < 27; row++) {
+        for (int col = 0; col < 27; col++) {
+            this->board[row][col] = nullptr;
+        }
+    }
+
+    // initalising Member values to a minimal starting point
+    this->boardShape = {26, 26};
+    this->quitGame = false;
+    this->moveNumber = 0;
+}
+
+GamesEngine::GamesEngine(std::string arg) {
+    // initalising Member values to a minimal starting point
+    this->re = new RulesEngine(this);
+    this->player1 = new Player("");
+    this->player2 = new Player("AI");
+    this->numPlayers = 2;
+    // Added for milestone 3
+    this->playerTurnCount = 1;
     this->activePlayer = this->player1;
     this->tileBag = nullptr;
 
@@ -71,8 +100,7 @@ void GamesEngine::mainMenu() {
         std::cout << "-----" << std::endl;
         std::cout << "1. New Game" << std::endl;
         std::cout << "2. Load Game" << std::endl;
-        std::cout << "3. Play the AI" << std::endl;
-        std::cout << "4. Credits (show student information)" << std::endl;
+        std::cout << "3. Credits (show student information)" << std::endl;
         std::cout << "5. Quit\n" << std::endl;
         
         std::cout << "Enter your selection (1-4):" << std::endl;
@@ -116,16 +144,6 @@ void GamesEngine::mainMenu() {
             loadGame();
         // Option 3 is AI game
         } else if (menuSelection == "3") {
-            this->numPlayers = 2;
-            this->player2->setPlayerName("AI!!!");
-
-            getPlayerName(1);
-            // Populating player tiles with tilebag values
-            dealGame();
-            // Initiate gameplay
-            playGame();
-        // Option 4 is print credits
-        }else if (menuSelection == "4") {
 
             std::cout << "\n--------------------------------" << std::endl;
 
@@ -173,14 +191,15 @@ void GamesEngine::playGame() {
 
     while (!re->isGameOver() && !quitGame) {
 
-        // print current scores and board
-        printGameStatus();
-        if(this->activePlayer->getPlayerName() == "AI!!!") {
+        if(this->activePlayer->getPlayerName() == "AI") {
             AIMove();
         } else {
+            // print current scores and board
+            printGameStatus();
+            // get player's turn
             playerTurn(activePlayer);
         }
-        // get player's turn
+
         
     }
     // After loop a final check for gameover is run, then results are printed
@@ -203,30 +222,38 @@ void GamesEngine::AIMove() {
                 BoardLocation* move = new BoardLocation(col, row, Tile(hand->get(tile)->colour, hand->get(tile)->shape));
                 BoardLocation& moveRef = *move;
                 if(re->isValidMove(moveRef)) {
-                    // std::cout << "Found a valid move: "<< std::endl;
-                    // std::cout << "location: " << alph[row] <<  " : "  << col << std::endl;
-                    // std::cout << "tile: " << hand->get(tile)->colour <<  " : "  << hand->get(tile)->shape << std::endl;
                     moveRef.setScore(re->calculateScores(moveRef));
                     availableMoves.push_back(move);
+                } else {
+                    delete move;
                 }
             }  
         }
     }
 
-    if(availableMoves.size() > 0) {
-        auto max_it = std::max_element(availableMoves.begin(), availableMoves.end(),
-        [](const BoardLocation* a, const BoardLocation* b) { return a->getScore() < b->getScore(); });
-        int max_value = (*max_it)->getScore();
-        BoardLocation& maxMove = *(*max_it);
+    std::cout << std::endl;
+    std::cout << std::endl;
 
-        std::cout << "Available Moves: " << maxMove.getScore() << std::endl;
+    if(availableMoves.size() > 0) {
+        auto max = std::max_element(availableMoves.begin(), availableMoves.end(),
+        [](const BoardLocation* a, const BoardLocation* b) { return a->getScore() < b->getScore(); });
+        BoardLocation& maxMove = *(*max);
+
         re->applyMove(maxMove, this->activePlayer);
         this->activePlayer->setPlayerScore(this->activePlayer->getPlayerScore() + maxMove.getScore());
 
-        std::cout << "The AI Moved Tile: " << maxMove.getTile().colour << maxMove.getTile().shape << std::endl;
-        std::cout << "To Row: " << maxMove.getRow() <<  " Col: "  << maxMove.getCol() << std::endl;
+        std::cout << "The AI placed Tile " << maxMove.getTile().colour << maxMove.getTile().shape;
+        std::cout << " at "  <<alph[maxMove.getCol()] << maxMove.getRow()<< std::endl;
+        std::cout << std::endl;
+
+        std::cout << "The AI's hand is " << std::endl;
+        this->activePlayer->printAllTiles();
 
         this->moveNumber++;
+
+        for (int i = 0; i < availableMoves.size(); i++) {
+            delete availableMoves[i];
+        }
     } else {
         // Replace a tile in AI Hand
         // Generate random int to get a random tile from the AI's hand
@@ -244,6 +271,7 @@ void GamesEngine::AIMove() {
         //update move number
         this->moveNumber++;
     }
+
 
     updateActivePlayer();
 }
