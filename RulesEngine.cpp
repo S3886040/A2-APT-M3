@@ -220,10 +220,10 @@ bool RulesEngine::isValidMove(const BoardLocation &location) const {
     horizontalLine.push_back(tile);
     verticalLine.push_back(tile);
     //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    // if (horizontalLine.size() >= 1) { horizontalLine.push_back(tile); }
+    if (horizontalLine.size() >= 1) { horizontalLine.push_back(tile); }
 
     // //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    // if (verticalLine.size() >= 1) { verticalLine.push_back(tile); }
+    if (verticalLine.size() >= 1) { verticalLine.push_back(tile); }
 
     //Check the validity of the move overall by validating lines and conditions
     if (!verifyByLine(verticalLine) || !verifyByLine(horizontalLine) || !isMoveAdjacentToOtherTilex || !isEmptySpot) {
