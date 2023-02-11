@@ -1,0 +1,12 @@
+2
+tests/load_games/AI_load_game.load
+place R6 at R6
+replace O5 
+place O3 at P5
+place P5 at O4
+place G2 at N3
+place G1 at M3
+place R4 at R7
+place Y4 at S7
+place G4 at T7
+place Y4 at K3

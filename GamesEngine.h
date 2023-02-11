@@ -244,15 +244,14 @@ public:
      * @returns string that was passed without whitespaces
     */
     std::string TrimFunction(std::string str);
-
     /**
-     * @brief Accepts a reference to a string, splits at comma value
+     * @brief Splits string into vector of values
      * 
-     * @param str string value to be split
+     * Will split values comma delimited
      * 
-     * @returns vector of string values
+     * @returns a vector of string values
     */
-    std::vector<std::string> splitString(const std::string &str);
+    std::vector<std::string>splitString(const std::string str);
 
     /**
      * @brief Checks name input

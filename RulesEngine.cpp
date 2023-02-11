@@ -46,6 +46,8 @@ bool RulesEngine::isMoveAdjacentToOtherTile(const BoardLocation &move) const {
     bool tileTop = false;
     bool tileBottom = false;
 
+    bool flag = false;
+
 
     if (x > 0) {
 
@@ -97,9 +99,11 @@ bool RulesEngine::isMoveAdjacentToOtherTile(const BoardLocation &move) const {
 
         }
     }
-
-
-    return tileBottom || tileTop || tileLeft || tileRight;
+    
+    if(tileBottom || tileTop || tileLeft || tileRight) {
+        return true;
+    }
+    return flag;
 
 }
 
@@ -274,11 +278,13 @@ int RulesEngine::calculateScores(const BoardLocation &location) {
     //Check for Qwirkle
     if (verticalLine.size() == 6) {
         score += 6;
+        std::cout << "QWIRKLE!!!" << std::endl;
     }
 
     //Check for Qwirkle
     if (horizontalLine.size() == 6) {
         score += 6;
+        std::cout << "QWIRKLE!!!" << std::endl;
     }
 
     return score;

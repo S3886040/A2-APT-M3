@@ -44,7 +44,7 @@ GamesEngine::GamesEngine() {
     }
 
     // initalising Member values to a minimal starting point
-    this->boardShape = {26, 26};
+    this->boardShape = {8, 8};
     this->quitGame = false;
     this->moveNumber = 0;
 }
@@ -209,12 +209,13 @@ void GamesEngine::playGame() {
 }
 
 void GamesEngine::AIMove() {
-    // Loop thorugh board and decide which moves are possible with the current hand
-    // Check all current tiles in hand against re->validmove. If validMove save into vector.
+    // Vector to store all valid moves
     std::vector<BoardLocation* > availableMoves;
-    char alph[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char alph[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";   
     LinkedList* hand = this->activePlayer->getPlayerHand();
 
+    // AI will loop through the board and test each location using valid move with all the tiles in its hand.
+    // All valid moves will be stored in a vector.
     for (int row = 0; row < 26; row++) {
         for (int col = 0; col < 26; col++) {
             for (int tile = 0; tile < hand->size(); tile++)
@@ -235,6 +236,7 @@ void GamesEngine::AIMove() {
     std::cout << std::endl;
 
     if(availableMoves.size() > 0) {
+        // Lambda function will find highest scoring move.
         auto max = std::max_element(availableMoves.begin(), availableMoves.end(),
         [](const BoardLocation* a, const BoardLocation* b) { return a->getScore() < b->getScore(); });
         BoardLocation& maxMove = *(*max);
@@ -243,9 +245,12 @@ void GamesEngine::AIMove() {
         this->activePlayer->setPlayerScore(this->activePlayer->getPlayerScore() + maxMove.getScore());
 
         std::cout << "The AI placed Tile " << maxMove.getTile().colour << maxMove.getTile().shape;
-        std::cout << " at "  <<alph[maxMove.getCol()] << maxMove.getRow()<< std::endl;
+        std::cout << " at "  << alph[maxMove.getCol()] << maxMove.getRow()<< std::endl;
         std::cout << std::endl;
 
+        if (tileBag->tiles->size() >= 1) {
+            this->activePlayer->drawTiles(tileBag, 1);
+        }
         std::cout << "The AI's hand is " << std::endl;
         this->activePlayer->printAllTiles();
 
@@ -254,6 +259,7 @@ void GamesEngine::AIMove() {
         for (int i = 0; i < availableMoves.size(); i++) {
             delete availableMoves[i];
         }
+        availableMoves.clear();
     } else {
         // Replace a tile in AI Hand
         // Generate random int to get a random tile from the AI's hand
@@ -265,25 +271,16 @@ void GamesEngine::AIMove() {
         //draw new tile after replacing tile
         this->activePlayer->drawTiles(tileBag, 1);
 
-        //update active player
-        updateActivePlayer();
         std::cout << "The AI Replaced a Tile" << std::endl;
+
+        std::cout << "The AI's hand is " << std::endl;
+        this->activePlayer->printAllTiles();
         //update move number
         this->moveNumber++;
     }
 
 
     updateActivePlayer();
-}
-
-std::vector<std::string> splitString(const std::string &str) {
-    std::vector<std::string> moves;
-    std::string move;
-    std::istringstream tokenStream(str);
-    while (std::getline(tokenStream, move, ',')) {
-        moves.push_back(move);
-    }
-    return moves;
 }
 
 void GamesEngine::playerTurn(Player* activePlayer){
@@ -567,6 +564,16 @@ std::string GamesEngine::TrimFunction(std::string str)
    return str;
 }
 
+std::vector<std::string> GamesEngine::splitString(const std::string str) {
+    std::vector<std::string> moves;
+    std::string move;
+    std::istringstream tokenStream(str);
+    while (std::getline(tokenStream, move, ',')) {
+        moves.push_back(move);
+    }
+    return moves;
+}
+
 void GamesEngine::loadGame() {
     bool goodLoad = false;
     while(!goodLoad)
@@ -581,16 +588,26 @@ void GamesEngine::loadGame() {
         std::ifstream myfile (file);
         // Count will keep track of line read position, incremented after every pass
         int count = 0;
+        //Variables to store read lines fro player info
+        std::string name = "";
+        int score = 0;
+        int playersAdded = 0;
+
         if (myfile.is_open()) {
             while ( getline(myfile,line) )
             {
+                if(line == "#default") {
+                    this->numPlayers = 2;
+                }
                 // Trims whitespaces
                 line = TrimFunction(line);
-                if(count == 0) {
-                    this->player1->setPlayerName(line);
+                if(count == 0 && line != "#default") {
+                    this->numPlayers = std::stoi(line);
                 } else if (count == 1) {
-                    this->player1->setPlayerScore(std::stoi(line));
-                }  else if (count == 2) {
+                    name = line;
+                }  else if (count == 2){
+                    score = std::stoi(line);
+                } else if (count == 3) {
                     //Set player1 hand
                     // String stream is used to split values seperated by a comma
                     LinkedList* hand = new LinkedList();
@@ -604,37 +621,43 @@ void GamesEngine::loadGame() {
 
                         hand->addBack(tile);
                     }
-                    player1->setPlayerHand(hand);
-                } else if (count == 3) {
-                    this->player2->setPlayerName(line);
-                } else if (count == 4) {
-                    this->player2->setPlayerScore(std::stoi(line));
-                } else if(count == 5) {
-                    //set player2 hand
-                    LinkedList* hand = new LinkedList();
-                    std::stringstream ss(line);
-            
-                    while (ss.good()) {
-                        std::string substr;
-                        getline(ss, substr, ',');
-                        // int(substr[1] - 48) will convert binary char to int accuratley
-                        Tile* tile = new Tile(substr[0], int(substr[1] - 48));
-
-                        hand->addBack(tile);
+                    if(playersAdded < this->numPlayers && playersAdded == 0) {
+                        this->player1->setPlayerName(name);
+                        this->player1->setPlayerScore(score);
+                        this->player1->setPlayerHand(hand);
+                        playersAdded++;
+                        count = 0;
+                    } else if(playersAdded < this->numPlayers && playersAdded == 1) {
+                        this->player2->setPlayerName(name);
+                        this->player2->setPlayerScore(score);
+                        this->player2->setPlayerHand(hand);
+                        playersAdded++;
+                        if(playersAdded < this->numPlayers) {
+                            count = 0;
+                        }
+                    } else if(playersAdded < this->numPlayers && playersAdded == 2) {
+                        this->player3->setPlayerName(name);
+                        this->player3->setPlayerScore(score);
+                        this->player3->setPlayerHand(hand);
+                        playersAdded++;
+                        if(playersAdded < this->numPlayers) {
+                            count = 0;
+                        }
+                    } else if(playersAdded < this->numPlayers && playersAdded == 3) {
+                        this->player4->setPlayerName(name);
+                        this->player4->setPlayerScore(score);
+                        this->player4->setPlayerHand(hand);
+                        playersAdded++;
+                        if(playersAdded < this->numPlayers) {
+                            count = 0;
+                        }
                     }
-                    player2->setPlayerHand(hand);
-                } else if(count == 6) {
-                    // Board shape! eg. height and width
-                    std::stringstream ss(line);
-                    int count = 0;
-                    while (ss.good()) {
-                        std::string substr;
-                        getline(ss, substr, ',');
-                        this->boardShape[count] = std::stoi(substr);
-                        count++;
-                    }
+                } else if(count == 4) {
+                    std::vector<std::string> strVec = splitString(line);
+                    this->boardShape[0] = std::stoi(strVec.at(0));
+                    this->boardShape[1] = std::stoi(strVec.at(1));
                     
-                } else if(count ==7) {
+                } else if(count ==5) {
                     // Update Board State
                     // Will check to see if board state is empty 
                     if(line != "") {
@@ -655,7 +678,7 @@ void GamesEngine::loadGame() {
                         }  
                     }
                     
-                } else if(count ==8) {
+                } else if(count ==6) {
                     // load tile bag
                     LinkedList* list = new LinkedList();
                     std::stringstream ss(line);
@@ -669,7 +692,7 @@ void GamesEngine::loadGame() {
                         list->addBack(tile);
                     }
                     this->tileBag->addTileList(list);
-                } else if (count == 9) {
+                } else if (count == 7) {
                     // current player name         
                     if(line ==  this->player1->getPlayerName()) {
                         this->activePlayer = this->player1;
@@ -718,30 +741,26 @@ void GamesEngine::loadGame() {
 void GamesEngine::saveGame(std::string fileName) {
     std::ofstream outputStream;
     outputStream.open(fileName, std::ios::out);
+
+    // Variable to keep track of number of players added to save file
+    int playersAdded = 0;
     if(outputStream.is_open()) {
-        
-        // Save player1 details
-        outputStream << player1->getPlayerName() << std::endl; 
-        outputStream << player1->getPlayerScore() << std::endl; 
-        LinkedList* hand = player1->getPlayerHand();
-        for (int i = 0; i < hand->size() ; i++) {
-         outputStream << hand->get(i)->colour << hand->get(i)->shape; 
-         if(i < 5) {
-            outputStream << ","; 
-         }
+        outputStream << this->numPlayers << std::endl;
+        while(playersAdded < this->numPlayers) {
+            outputStream << activePlayer->getPlayerName() << std::endl; 
+            outputStream << activePlayer->getPlayerScore() << std::endl; 
+            LinkedList* hand = activePlayer->getPlayerHand();
+            for (int i = 0; i < hand->size() ; i++) {
+            outputStream << hand->get(i)->colour << hand->get(i)->shape; 
+                if(i < 5) {
+                    outputStream << ","; 
+                }
+            }
+            playersAdded++;
+            updateActivePlayer();
+            outputStream << std::endl;
         }
-        outputStream << std::endl;
-        // Save player2 details
-        outputStream << player2->getPlayerName() << std::endl; 
-        outputStream << player2->getPlayerScore() << std::endl; 
-        hand = player2->getPlayerHand();
-        for (int i = 0; i < hand->size() ; i++) {
-         outputStream << hand->get(i)->colour << hand->get(i)->shape; 
-         if(i < 5) {
-            outputStream << ","; 
-         }
-        }
-        outputStream << std::endl;
+
         // Save board shape
         outputStream << this->boardShape[0] << "," << this->boardShape[1] << std::endl;
         // Save the state of the board
@@ -799,14 +818,6 @@ void GamesEngine::updateActivePlayer() {
         this->activePlayer = player4;
         this->playerTurnCount = 0;
     }
-
-
-
-    // if (this->activePlayer == player1) {
-    //     this->activePlayer = player2;
-    // } else {
-    //     this->activePlayer = player1;
-    // }
 }
 
 void GamesEngine::placeTile(int x, int y, Tile* tileValue) {
@@ -815,7 +826,14 @@ void GamesEngine::placeTile(int x, int y, Tile* tileValue) {
 }
 
 bool GamesEngine::nameChecker(std::string const &str) {
-    return std::regex_match(str, std::regex("^[A-Z]+$"));
+    bool okName = false;
+    if(str == "AI") {
+        okName = false;
+    } else {
+        okName = std::regex_match(str, std::regex("^[A-Z]+$"));
+    }
+    
+    return okName;
 };
 
 //Method for shuffling tiles in tilebag
@@ -846,6 +864,12 @@ void GamesEngine::printGameStatus() {
     std::cout << "Current scores" << std::endl;
     std::cout << this->player1->getPlayerName() << ": " << this->player1->getPlayerScore() << std::endl;
     std::cout << this->player2->getPlayerName() << ": " << this->player2->getPlayerScore() << std::endl;
+    if(this->numPlayers == 3) {
+        std::cout << this->player3->getPlayerName() << ": " << this->player3->getPlayerScore() << std::endl;
+    } else if(this->numPlayers == 4) {
+        std::cout << this->player3->getPlayerName() << ": " << this->player3->getPlayerScore() << std::endl;
+        std::cout << this->player4->getPlayerName() << ": " << this->player4->getPlayerScore() << std::endl;
+    }
     std::cout << std::endl;
 
     // Print the current board
@@ -924,11 +948,11 @@ void GamesEngine::printBoard() {
     std::cout << "--------------------------------------------------------------------------------" << std::endl;
 
     // Print board
-    for (int row = 0; row < 26; row++) {
+    for (int row = 0; row < this->boardShape[0]; row++) {
         // Print row index
         std::cout << static_cast<char>('A' + row) << "|";
 
-        for (int col = 0; col < 26; col++) {
+        for (int col = 0; col < this->boardShape[1]; col++) {
             if (board[row][col] == nullptr) {
                 std::cout << "  |";
             } else {
