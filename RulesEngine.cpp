@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cassert>
+#include <set>
 #include "BoardLocation.h"
 #include "LinkedList.h"
 #include "RulesEngine.h"
 #include "Player.h"
 #include "TileBag.h"
+#include "Tile.h"
 
 RulesEngine::RulesEngine() {}
 
@@ -132,36 +134,87 @@ void RulesEngine::applyMove(BoardLocation &move, Player *player) {
 }
 
 bool RulesEngine::verifyByLine(std::vector<Tile *> line) const {
+    bool passed = false;
+    // Check all tiles in the line have same colour
+    if (isAllSameColor(line)) {
+        passed = true;
+    // if all tiles do not have the same colour we check their shape
+    } else if (isAllSameShape(line)) {
+        passed = true;
+    } 
+    // Line size means a line does not exist and does not need proofing
+    if(line.size() == 0) {
+        passed = true;
+    }
+    // Ensures no duplicate values occur in the line
+    if(hasSameTile(line)) {
+        passed = false;
+    }
 
-    bool sameColour = true;
-    bool sameShape = true;
-    bool identical = false;
+    return passed;
+}
 
-    //check the validity of the line
-    for (unsigned int i = 0; i < line.size(); ++i) {
-        for (unsigned int j = i + 1; j < line.size(); ++j) {
-
-            if (line[i]->colour == line[j]->colour && line[i]->shape == line[j]->shape) {
-                identical = true;
-            }
-            if (line[i]->colour != line[j]->colour) {
-                sameColour = false;
-            }
-            if (line[i]->shape != line[j]->shape) {
-                sameShape = false;
+bool RulesEngine::isAllSameColor(std::vector<Tile*>& row) const {
+    bool isSame = true;
+    if (row.empty()) {
+        isSame = true;
+    } else{
+        char colour = row[0]->colour;
+        for (const auto& tile : row) {
+            if (tile->colour != colour) {
+                isSame = false;
             }
         }
     }
-
-    return !identical && (sameShape || sameColour);
+    return isSame;
 }
+
+bool RulesEngine::isAllSameShape(std::vector<Tile*>& row) const {
+    bool isSame = true;
+    if (row.empty()) {
+        isSame = true;
+    } else{
+        int shape = row[0]->shape;
+        for (const auto& tile : row) {
+            if (tile->shape != shape) {
+                isSame = false;
+            }
+        }
+    }
+    return isSame;
+}
+
+bool RulesEngine::hasSameTile(std::vector<Tile*>& row) const {
+    std::set<std::string> holder;
+    bool hasSame = false;
+    if (row.empty()) {
+        hasSame = false;
+    } else{
+        int shape = row[0]->shape;
+        char colour = row[0]->colour;
+        for (const auto& tile : row) {
+            std::string temp = std::string(1, tile->colour) + std::to_string(tile->shape);
+            holder.insert(temp);
+        }
+        // Compare set size and row size to determine if duplicate exists
+        if (holder.size() < row.size()) {
+            hasSame = true;
+        } 
+    }
+    return hasSame;
+}
+
+
 
 bool RulesEngine::allPlayersHaveEmptyHand() {
 
     bool isGameOver = false;
     Player *player1 = ge->getPlayers()[0];
     Player *player2 = ge->getPlayers()[1];
-    if (player1->getPlayerHand()->isEmpty() && player2->getPlayerHand()->isEmpty()) {
+    Player *player3 = ge->getPlayers()[2];
+    Player *player4 = ge->getPlayers()[3];
+    if (player1->getPlayerHand()->isEmpty() && player2->getPlayerHand()->isEmpty() 
+    && player3->getPlayerHand()->isEmpty() && player4->getPlayerHand()->isEmpty()) {
         isGameOver = true;
     }
 
@@ -169,7 +222,7 @@ bool RulesEngine::allPlayersHaveEmptyHand() {
 
 }
 
-bool RulesEngine::isPlayerHasTile(LinkedList *playerHand, const Tile *tile) {
+bool RulesEngine::isPlayerHasTile(LinkedList *playerHand, Tile *tile) const {
 
     Node *curr = playerHand->getHead();
 
@@ -182,75 +235,67 @@ bool RulesEngine::isPlayerHasTile(LinkedList *playerHand, const Tile *tile) {
     return false;
 }
 
-bool RulesEngine::isValidMove(const BoardLocation &location) const {
-
+bool RulesEngine::isValidMove(const BoardLocation &location, Player* player) const {
 
     bool isValid = true;
-
 
     int col = location.getRow();
     int row = location.getCol();
 
     Tile *tile = new Tile(location.getTile().colour, location.getTile().shape);
     //Vectors to store the
-    std::vector<Tile *> horizontalLine, verticalLine;
+    std::vector<Tile *> horizontalLineVM(7), verticalLineVM(7);
 
     //Boolean values to check the validity of the move
     bool isMoveAdjacentToOtherTilex = true;
-    bool isEmptySpot = true;
-
+    bool isEmptySpot = false;
+    bool playerHasTile = false;
+    // Checks to see if board location is empty
+    if (ge->getBoard()[row][col] == nullptr) {
+        isEmptySpot = true;
+    }
 
     //Check if it has adjacent tiles
     if (!isMoveAdjacentToOtherTile(location)) {
-
         isMoveAdjacentToOtherTilex = false;
     }
 
-    // The location must be empty
-    if (ge->getBoard()[row][col] != nullptr) {
-        isEmptySpot = false;
+    if(isPlayerHasTile(player->getPlayerHand(), tile)) {
+        playerHasTile = true;
     }
 
     //Check vertical and store in vector
-    verticalLine = hasVertical(location);
+    verticalLineVM = hasVertical(location);
 
     //Check horizontal and store in vector
-    horizontalLine = hasHorizontal(location);
+    horizontalLineVM = hasHorizontal(location);
 
-    horizontalLine.push_back(tile);
-    verticalLine.push_back(tile);
-    //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    if (horizontalLine.size() >= 1) { horizontalLine.push_back(tile); }
 
-    // //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    if (verticalLine.size() >= 1) { verticalLine.push_back(tile); }
+
+    //  If there is > 1 in the line - add the current tile to the line so that it can be validated
+    if (horizontalLineVM.size() >= 1) { horizontalLineVM.push_back(tile); }
+
+    ///If there is > 1 in the line - add the current tile to the line so that it can be validated
+    if (verticalLineVM.size() >= 1) { verticalLineVM.push_back(tile); }
 
     //Check the validity of the move overall by validating lines and conditions
-    if (!verifyByLine(verticalLine) || !verifyByLine(horizontalLine) || !isMoveAdjacentToOtherTilex || !isEmptySpot) {
-
+    if (!verifyByLine(verticalLineVM) || !verifyByLine(horizontalLineVM) || !isMoveAdjacentToOtherTilex || !isEmptySpot || !playerHasTile) {
         isValid = false;
-
-        //If it is valid - add points to the players score accordingly
     } else {
-
-        // ge->getCurrentPlayer()->setPlayerScore(
-        //         ge->getCurrentPlayer()->getPlayerScore() + verticalLine.size() + horizontalLine.size());
-
-        // //Check for Qwirkle
-        // if (verticalLine.size() == 6) {
-        //     ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
-        //     std::cout << "QWIRKLE!!!" << std::endl;
-        // }
-
-        // //Check for Qwirkle
-        // if (horizontalLine.size() == 6) {
-        //     ge->getCurrentPlayer()->setPlayerScore(ge->getCurrentPlayer()->getPlayerScore() + 6);
-        //     std::cout << "QWIRKLE!!!" << std::endl;
-        // }
-
-
         isValid = true;
+    }
 
+    // clean up of resources
+    if (horizontalLineVM.size() >= 1) {
+        for (int i = 0; i < horizontalLineVM.size(); i++)
+        {
+            delete horizontalLineVM[i];
+        }
+    } else {
+        for (int j = 0; j < verticalLineVM.size(); j++)
+        {
+            delete verticalLineVM[j];
+        }
     }
 
     return isValid;
@@ -269,12 +314,14 @@ int RulesEngine::calculateScores(const BoardLocation &location) {
     //Check horizontal and store in vector
     horizontalLine = hasHorizontal(location);
 
-    //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    if (horizontalLine.size() >= 1) { horizontalLine.push_back(tile); };
+    //If there is > 1 in the line - add the current tile to only one line
+    if (horizontalLine.size() >= 1) { 
+        horizontalLine.push_back(tile); 
+    } else if (verticalLine.size() >= 1) { 
+        verticalLine.push_back(tile); 
+    };     
 
-    //If there is > 1 in the line - add the current tile to the line so that it can be validated
-    if (verticalLine.size() >= 1) { verticalLine.push_back(tile); };
-
+    // Score is then equal to accumalative line sizes
     score = verticalLine.size() + horizontalLine.size();
 
     //Check for Qwirkle
@@ -289,6 +336,19 @@ int RulesEngine::calculateScores(const BoardLocation &location) {
         std::cout << "QWIRKLE!!!" << std::endl;
     }
 
+    // clean up of resources
+    if (horizontalLine.size() >= 1) {
+        for (int i = 0; i < horizontalLine.size(); i++)
+        {
+            delete horizontalLine[i];
+        }
+    } else {
+        for (int j = 0; j < verticalLine.size(); j++)
+        {
+            delete verticalLine[j];
+        }
+    }
+
     return score;
 };
 
@@ -297,69 +357,28 @@ std::vector<Tile *>  RulesEngine::hasVertical(const BoardLocation &location) con
     int col = location.getRow();
     int row = location.getCol();
 
-    // Create a new tile from the tile at the given location
-    Tile *tile = new Tile(location.getTile().colour, location.getTile().shape);
-    Tile *currentTile = new Tile(tile->colour, tile->shape);
+    std::vector<std::vector<Tile *> > board = ge->getBoard();
 
     // Create a vector to store the vertical line of tiles
     std::vector<Tile *> verticalLine;
-
-    // Check tiles to the left
-    bool shouldStop = false;
-    for (int lineLength = 1; lineLength < 26 && !shouldStop; lineLength++) {
-        int r = row, c = col - lineLength;
-
-        // Check if the location is within the bounds of the board
-        if (c >= 0 && c < 26 && r >= 0 && r < 26) {
-
-            // Check if the current location on the board is not empty
-            if (ge->getBoard()[r][c] != nullptr) {
-                // Check if the tile at the current location has the same colour or shape as the current tile
-                if (ge->getBoard()[r][c]->colour == currentTile->colour ||
-                    ge->getBoard()[r][c]->shape == currentTile->shape) {
-                    // If so, update the current tile and add it to the vertical line
-                    currentTile = ge->getBoard()[r][c];
-                    verticalLine.push_back(ge->getBoard()[r][c]);
-                } else {
-                    // If not, stop checking for tiles
-                    shouldStop = true;
-                }
-            } else {
-                // If the current location is empty, stop checking for tiles
-                shouldStop = true;
-            }
+    bool stop = false; 
+    // Will search upwards of current position
+    for (int j = row - 1; j >= 0; j--) {
+        if(board[j][col] != nullptr) {
+            verticalLine.push_back(new Tile(board[j][col]->colour, board[j][col]->shape));
+        } else {
+            j = 0;
         }
+    }    
 
-    }
-
-    // Check tiles to the right
-    shouldStop = false;
-    for (int lineLength = 1; lineLength < 26 && !shouldStop; lineLength++) {
-        int r = row, c = col + lineLength;
-
-        // Check if the location is within the bounds of the board
-        if (c >= 0 && c < 26 && r >= 0 && r < 26) {
-
-            // Check if the current location on the board is not empty
-            if (ge->getBoard()[r][c] != nullptr) {
-                // Check if the tile at the current location has the same colour or shape as the current tile
-                if (ge->getBoard()[r][c]->colour == currentTile->colour ||
-                    ge->getBoard()[r][c]->shape == currentTile->shape) {
-                    // If so, update the current tile and add it to the vertical line
-                    currentTile = ge->getBoard()[r][c];
-                    verticalLine.push_back(ge->getBoard()[r][c]);
-                } else {
-                    // If not, stop checking for tiles
-                    shouldStop = true;
-                }
-            } else {
-                // If the current location is empty, stop checking for tiles
-                shouldStop = true;
-            }
+    // Will search downwards from current position
+    for (int j = row + 1; j < 26; j++) {
+        if(board[j][col] != nullptr) {
+            verticalLine.push_back(new Tile(board[j][col]->colour, board[j][col]->shape));
+        } else {
+            j = 26;
         }
-
     }
-
     // Return the line of tiles
     return verticalLine;
 
@@ -370,74 +389,28 @@ std::vector<Tile *> RulesEngine::hasHorizontal(const BoardLocation &location) co
     int col = location.getRow();
     int row = location.getCol();
 
-    // create a new Tile object with the colour and shape of the tile in the given location
-    Tile *tile = new Tile(location.getTile().colour, location.getTile().shape);
-    Tile *currentTile = new Tile(tile->colour, tile->shape);
+    std::vector<std::vector<Tile *> > board = ge->getBoard();
 
     // create an empty vector to store the line of matching tiles
     std::vector<Tile *> horizontalLine;
 
-    // flag to stop the loop when the matching tile line ends
-    bool shouldStop = false;
-
-    // check tiles to the north of the given location and add to the line of matching tiles
-    for (int lineLength = 1; lineLength < 26 && !shouldStop; lineLength++) {
-        int r = row - lineLength, c = col;
-
-        // check if the current location is within the bounds of the board
-        if (c >= 0 && c < 26 && r >= 0 && r < 26) {
-            // check if there is a tile at the current location
-            if (ge->getBoard()[r][c] != nullptr) {
-                // check if the tile at the current location has the same colour or shape as the tile in the given location
-                if (ge->getBoard()[r][c]->colour == currentTile->colour ||
-                    ge->getBoard()[r][c]->shape == currentTile->shape) {
-                    // update the currentTile object to the matching tile
-                    currentTile = ge->getBoard()[r][c];
-                    // add the matching tile to the line of matching tiles
-                    horizontalLine.push_back(ge->getBoard()[r][c]);
-                } else {
-                    // set the flag to stop the loop if the tile does not match
-                    shouldStop = true;
-                }
-            } else {
-                // set the flag to stop the loop if there is no tile at the current location
-                shouldStop = true;
-            }
+    // Will search to the left of current tile on board
+    for (int j = col - 1; j >= 0; j--) {
+        if(board[row][j] != nullptr) {
+            horizontalLine.push_back(new Tile(board[row][j]->colour, board[row][j]->shape));
+        } else {
+            j = 0;
         }
+
     }
-
-    // reset the currentTile object to the tile in the given location
-    currentTile = new Tile(tile->colour, tile->shape);
-    // reset the flag to stop the loop
-    shouldStop = false;
-
-    // check tiles to the south of the given location and add to the line of matching tiles
-    for (int lineLength = 1; lineLength < 26 && !shouldStop; lineLength++) {
-        int r = row + lineLength, c = col;
-
-        // check if the current location is within the bounds of the board
-        if (c >= 0 && c < 26 && r >= 0 && r < 26) {
-            // check if there is a tile at the current location
-            if (ge->getBoard()[r][c] != nullptr) {
-                // check if the tile at the current location has the same colour or shape as the tile in the given location
-                if (ge->getBoard()[r][c]->colour == currentTile->colour ||
-                    ge->getBoard()[r][c]->shape == currentTile->shape) {
-                    // update the currentTile object to the matching tile
-                    currentTile = ge->getBoard()[r][c];
-                    // add the matching tile to the
-                    horizontalLine.push_back(ge->getBoard()[r][c]);
-                } else {
-                    // If not, stop checking for tiles
-                    shouldStop = true;
-                }
-            } else {
-                // If the current location is empty, stop checking for tiles
-                shouldStop = true;
-            }
+    // Will search to the right of current tile on board
+    for (int j = col + 1; j < 26 ; j++) {
+        if(board[row][j] != nullptr) {
+            horizontalLine.push_back(new Tile(board[row][j]->colour, board[row][j]->shape));
+        } else {
+            j = 26;
         }
-
     }
 
     return horizontalLine;
-
 }

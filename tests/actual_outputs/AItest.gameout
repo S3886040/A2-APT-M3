@@ -1,0 +1,532 @@
+Welcome to Qwirkle!
+-------------------
+
+Menu
+-----
+1. New Game
+2. Load Game
+3. Credits (show student information)
+5. Quit
+
+Enter your selection (1-4):
+> 
+Enter a file name of a saved game:
+> 
+Game successfully loaded
+
+Let's play!
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 0
+AI: 0
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |  |  |  |  |  |  |  |  |  |  |
+B|  |  |  |  |  |  |  |  |  |  |  |  |
+C|  |  |  |  |  |  |  |  |  |  |  |  |
+D|  |  |  |  |  |  |  |  |  |  |  |  |
+E|  |  |  |  |  |  |  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,R6,G2,Y4,G1
+
+Enter your move
+> 
+
+The AI placed Tile B6 at B3
+
+The AI's hand is 
+B6,O5,P1,G5,B3,O1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 1
+AI: 2
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |  |  |  |  |  |  |  |  |  |  |
+B|  |  |  |B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|  |  |  |  |  |  |  |  |
+D|  |  |  |  |  |  |  |  |  |  |  |  |
+E|  |  |  |  |  |  |  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,Y4,G1,O5
+
+Enter your move
+> 
+
+The AI placed Tile B3 at B2
+
+The AI's hand is 
+B6,O5,P1,G5,O1,Y1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 1
+AI: 4
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |  |  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|  |  |  |  |  |  |  |  |
+D|  |  |  |  |  |  |  |  |  |  |  |  |
+E|  |  |  |  |  |  |  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,Y4,G1,R4
+
+Enter your move
+> 
+
+The AI placed Tile B6 at A2
+
+The AI's hand is 
+O5,P1,G5,O1,Y1,G1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 3
+AI: 6
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |  |  |  |  |  |  |  |  |
+E|  |  |  |  |  |  |  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,Y4,G1,B2
+
+Enter your move
+> 
+
+The AI placed Tile Y1 at D5
+
+The AI's hand is 
+O5,P1,G5,O1,G1,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 5
+AI: 8
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |Y4|Y1|  |  |  |  |  |  |
+E|  |  |  |  |  |  |  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,G1,B2,Y4
+
+Enter your move
+> 
+
+The AI Replaced a Tile
+The AI's hand is 
+O5,P1,G5,G1,P1,O2
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 7
+AI: 8
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |  |B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |Y4|Y1|  |  |  |  |  |  |
+E|  |  |  |  |  |Y4|  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,G1,B2,O3
+
+Enter your move
+> 
+
+The AI Replaced a Tile
+The AI's hand is 
+O5,G5,G1,P1,O2,P2
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 9
+AI: 8
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |Y4|Y1|  |  |  |  |  |  |
+E|  |  |  |  |  |Y4|  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,G1,O3,Y6
+
+Enter your move
+> 
+
+The AI Replaced a Tile
+The AI's hand is 
+O5,G5,P1,O2,P2,Y2
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 12
+AI: 8
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|  |  |  |  |  |
+E|  |  |  |  |  |Y4|  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,G1,O3,G4
+
+Enter your move
+> 
+
+The AI placed Tile Y2 at D7
+
+The AI's hand is 
+O5,G5,P1,O2,P2,O5
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 12
+AI: 12
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |  |  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |  |Y4|  |  |  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G2,G1,O3,B4
+
+Enter your move
+> 
+
+The AI placed Tile O2 at C7
+
+The AI's hand is 
+O5,G5,P1,P2,O5,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 14
+AI: 15
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |  |Y4|  |G2|  |  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,G1,O3,B4,O1
+
+Enter your move
+> 
+
+The AI placed Tile P2 at B7
+
+The AI's hand is 
+O5,G5,P1,O5,P1,G4
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 16
+AI: 19
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |P2|  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |  |Y4|  |G2|G1|  |  |  |
+F|  |  |  |  |  |  |  |  |  |  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,P5,O3,B4,O1,G1
+
+Enter your move
+> 
+
+The AI placed Tile G4 at E4
+
+The AI's hand is 
+O5,G5,P1,O5,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 18
+AI: 23
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |P2|  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |G4|Y4|  |G2|G1|  |  |  |
+F|  |  |  |  |  |  |  |  |P1|  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,O3,B4,O1,G1
+
+Enter your move
+> 
+
+The AI placed Tile G5 at E10
+
+The AI's hand is 
+O5,P1,O5,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 21
+AI: 27
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |  |P2|  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |G4|Y4|  |G2|G1|G4|G5|  |
+F|  |  |  |  |  |  |  |  |P1|  |  |  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,B4,O1,G1
+
+Enter your move
+> 
+
+The AI placed Tile P1 at B6
+
+The AI's hand is 
+O5,O5,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 23
+AI: 29
+
+   0  1  2  3  4  5  6  7  8  9 10 11
+--------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |P1|P2|  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |
+E|  |  |  |  |G4|Y4|  |G2|G1|G4|G5|  |
+F|  |  |  |  |  |  |  |  |P1|  |O5|  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O3,O1,G1
+
+Enter your move
+> 
+
+The AI placed Tile O5 at C8
+
+The AI's hand is 
+O5,P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 25
+AI: 31
+
+   0  1  2  3  4  5  6  7  8  9 10 11 12
+-----------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |P1|P2|  |  |  |  |  |
+C|  |  |  |R6|R4|  |  |O2|O5|  |  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |  |
+E|  |  |  |  |G4|Y4|  |G2|G1|G4|G5|  |  |
+F|  |  |  |  |  |  |  |  |P1|  |O5|O3|  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O1,G1
+
+Enter your move
+> 
+
+The AI placed Tile O5 at B9
+
+The AI's hand is 
+P1
+
+DAVE, it's your turn
+
+Current scores
+DAVE: 28
+AI: 33
+
+   0  1  2  3  4  5  6  7  8  9 10 11 12
+-----------------------------------------
+A|  |B2|B6|  |  |  |  |  |  |  |  |  |  |
+B|  |  |B3|B6|  |  |P1|P2|  |O5|  |  |  |
+C|  |  |  |R6|R4|  |  |O2|O5|O3|  |  |  |
+D|  |  |  |  |Y4|Y1|Y6|Y2|  |  |  |  |  |
+E|  |  |  |  |G4|Y4|  |G2|G1|G4|G5|  |  |
+F|  |  |  |  |  |  |  |  |P1|  |O5|O3|  |
+G|  |  |  |  |  |  |  |  |  |  |  |  |  |
+H|  |  |  |  |  |  |  |  |  |  |  |  |  |
+I|  |  |  |  |  |  |  |  |  |  |  |  |  |
+J|  |  |  |  |  |  |  |  |  |  |  |  |  |
+K|  |  |  |  |  |  |  |  |  |  |  |  |  |
+L|  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+O1
+
+Enter your move
+> 
+
+The AI placed Tile P1 at G12
+
+The AI's hand is 
+
+Game over
+---------
+DAVE: 30
+AI: 35
+
+AI WINS!!

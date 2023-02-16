@@ -214,20 +214,23 @@ void GamesEngine::AIMove() {
     char alph[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";   
     LinkedList* hand = this->activePlayer->getPlayerHand();
 
-    // AI will loop through the board and test each location using valid move with all the tiles in its hand.
-    // All valid moves will be stored in a vector.
+    // AI will loop through the board and test each location using validMove() with all the tiles in its hand.
+    // All valid moves will be stored in a vector. Along with their respective scores
     for (int row = 0; row < 26; row++) {
         for (int col = 0; col < 26; col++) {
             for (int tile = 0; tile < hand->size(); tile++)
             {   
-                BoardLocation* move = new BoardLocation(col, row, Tile(hand->get(tile)->colour, hand->get(tile)->shape));
-                BoardLocation& moveRef = *move;
-                if(re->isValidMove(moveRef)) {
-                    moveRef.setScore(re->calculateScores(moveRef));
-                    availableMoves.push_back(move);
-                } else {
-                    delete move;
+                if(board[row][col] == nullptr) {
+                    BoardLocation* move = new BoardLocation(col, row, Tile(hand->get(tile)->colour, hand->get(tile)->shape));
+                    BoardLocation& moveRef = *move;
+                    if(re->isValidMove(moveRef, this->activePlayer)) {
+                        moveRef.setScore(re->calculateScores(moveRef));
+                        availableMoves.push_back(move);
+                    } else {
+                        delete move;
+                    }
                 }
+                
             }  
         }
     }
@@ -235,12 +238,14 @@ void GamesEngine::AIMove() {
     std::cout << std::endl;
     std::cout << std::endl;
 
+    // If available moves are found, highest will be saved and applied, else the AI will replace a random tile in their hand
     if(availableMoves.size() > 0) {
         // Lambda function will find highest scoring move.
         auto max = std::max_element(availableMoves.begin(), availableMoves.end(),
         [](const BoardLocation* a, const BoardLocation* b) { return a->getScore() < b->getScore(); });
         BoardLocation& maxMove = *(*max);
 
+        // Highest scoring move is then applied and scores incremented
         re->applyMove(maxMove, this->activePlayer);
         this->activePlayer->setPlayerScore(this->activePlayer->getPlayerScore() + maxMove.getScore());
 
@@ -256,10 +261,10 @@ void GamesEngine::AIMove() {
 
         this->moveNumber++;
 
+        // Clean up resources
         for (int i = 0; i < availableMoves.size(); i++) {
             delete availableMoves[i];
         }
-        availableMoves.clear();
     } else {
         // Replace a tile in AI Hand
         // Generate random int to get a random tile from the AI's hand
@@ -279,7 +284,7 @@ void GamesEngine::AIMove() {
         this->moveNumber++;
     }
 
-
+    // Active player will be updated, and play resumes.
     updateActivePlayer();
 }
 
@@ -479,9 +484,11 @@ void GamesEngine::playerTurn(Player* activePlayer){
                         if(validTile && index <= 5)
                         {
                             BoardLocation& move = convertStringToMove(stringInputForMove);
+                            std::cout << stringInputForMove << std::endl;
 
+                            if(re->isPlayerHasTile(this->activePlayer->getPlayerHand(), tile)) {
                             // Process the move and check if it is valid
-                            if (re->isValidMove(move) || this->moveNumber == 0) 
+                            if (re->isValidMove(move, this->activePlayer) || this->moveNumber == 0) 
                             {
                             
                                 if (moveNumber == 0 && this->activePlayer->getPlayerScore() == 0){
@@ -520,6 +527,7 @@ void GamesEngine::playerTurn(Player* activePlayer){
 
                                 this->moveNumber++;
                                 validCommand = true;
+                            }
                             }
                         }
                     }
@@ -623,7 +631,6 @@ void GamesEngine::loadGame() {
                 }  else if (count == 2){
                     score = std::stoi(line);
                 } else if (count == 3) {
-                    //Set player1 hand
                     // String stream is used to split values seperated by a comma
                     LinkedList* hand = new LinkedList();
                     std::stringstream ss(line);
@@ -647,6 +654,7 @@ void GamesEngine::loadGame() {
                         this->player2->setPlayerScore(score);
                         this->player2->setPlayerHand(hand);
                         playersAdded++;
+                        // count will be redefined to allow next player to be defined
                         if(playersAdded < this->numPlayers) {
                             count = 0;
                         }
@@ -655,6 +663,7 @@ void GamesEngine::loadGame() {
                         this->player3->setPlayerScore(score);
                         this->player3->setPlayerHand(hand);
                         playersAdded++;
+                        // count will be redefined to allow next player to be defined
                         if(playersAdded < this->numPlayers) {
                             count = 0;
                         }
@@ -663,6 +672,7 @@ void GamesEngine::loadGame() {
                         this->player4->setPlayerScore(score);
                         this->player4->setPlayerHand(hand);
                         playersAdded++;
+                        // count will be redefined to allow next player to be defined
                         if(playersAdded < this->numPlayers) {
                             count = 0;
                         }
@@ -761,6 +771,7 @@ void GamesEngine::saveGame(std::string fileName) {
     int playersAdded = 0;
     if(outputStream.is_open()) {
         outputStream << this->numPlayers << std::endl;
+        // Loop will continue until all players have been added to save file
         while(playersAdded < this->numPlayers) {
             outputStream << activePlayer->getPlayerName() << std::endl; 
             outputStream << activePlayer->getPlayerScore() << std::endl; 
@@ -904,18 +915,35 @@ void GamesEngine::dealGame() {
 
 void GamesEngine::printGameResult() {
     // Print the final score
+    // std::cout << "Game over" << std::endl;
+    // std::cout << "---------" << std::endl;
+    // std::cout << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+    // std::cout << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+    // std::cout << std::endl;
+    // if(player1->getPlayerScore() > player2->getPlayerScore()){
+    //     std::cout << player1->getPlayerName() << " WINS!!" << std::endl;
+    // } else if(player2->getPlayerScore() > player1->getPlayerScore()){
+    //     std::cout << player2->getPlayerName() << " WINS!!" << std::endl;
+    // } else {
+    //     std::cout << "IT'S A TIE!!" << std::endl;
+    // }
+
+    std::vector<Player* > players;
+    int i = 0;
+
+    // Print the final score
     std::cout << "Game over" << std::endl;
     std::cout << "---------" << std::endl;
-    std::cout << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
-    std::cout << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
-    std::cout << std::endl;
-    if(player1->getPlayerScore() > player2->getPlayerScore()){
-        std::cout << player1->getPlayerName() << " WINS!!" << std::endl;
-    } else if(player2->getPlayerScore() > player1->getPlayerScore()){
-        std::cout << player2->getPlayerName() << " WINS!!" << std::endl;
-    } else {
-        std::cout << "IT'S A TIE!!" << std::endl;
+    while(i < this->numPlayers) {
+        players.push_back(this->activePlayer);
+        std::cout << this->activePlayer->getPlayerName() << ": " << this->activePlayer->getPlayerScore() << std::endl;
+        updateActivePlayer();
+        i++;
     }
+    auto maxIt = std::max_element(players.begin(), players.end(),
+    [](Player* a, Player* b) { return a->getPlayerScore() < b->getPlayerScore(); });
+    Player& max = *(*maxIt);
+    std::cout << max.getPlayerName() << " WINS!!" << std::endl;
 }
 
 Tile* GamesEngine::convertStringToTile(std::string input)
@@ -1028,6 +1056,8 @@ std::vector<Player *> GamesEngine::getPlayers() {
     std::vector<Player *> players;
     players.push_back(this->player1);
     players.push_back(this->player2);
+    players.push_back(this->player3);
+    players.push_back(this->player4);
     return players;
 
 }

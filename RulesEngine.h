@@ -66,7 +66,7 @@ public:
      *
      * @return bool Returns true if the player has the tile, false otherwise
      */
-    bool isPlayerHasTile(LinkedList *playerHand, const Tile *tile);
+    bool isPlayerHasTile(LinkedList *playerHand, Tile *tile) const;
 
     /**
      * @brief Check if the move is adjacent to another tile
@@ -86,7 +86,7 @@ public:
      *
      * @return bool Returns true if the move is valid, false otherwise
      */
-    bool isValidMove(const BoardLocation &location) const;
+    bool isValidMove(const BoardLocation &location, Player* player) const;
 
     /**
      * @brief Check if the player has enough tile
@@ -138,7 +138,42 @@ public:
      */
     std::vector<Tile *> hasHorizontal(const BoardLocation &location) const;
 
+    /**
+     * @brief Function to analyse the board and calculate scores of a succesful move
+     *
+     * @param location The `BoardLocation` from which to retrieve a horizontal line of tiles.
+     *
+     * @returns an int value of players score
+     */
     int calculateScores(const BoardLocation &location);
+
+    /**
+     * @brief Checks a vector to test if values have the same colour
+     *
+     * @param row   a reference to a vector of tile pointers  
+     * 
+     * @returns a boolean value
+     */
+    bool isAllSameColor(std::vector<Tile*>& row) const;
+
+    /**
+     * @brief Checks a vector to test if values have the same shape
+     *
+     * @param row   a reference to a vector of tile pointers  
+     * 
+     * @returns a boolean value
+     */
+    bool isAllSameShape(std::vector<Tile*>& row) const;
+
+    /**
+     * @brief Checks a vector to test if any duplicate values exist
+     *
+     * @param row   a reference to a vector of tile pointers  
+     * 
+     * @returns a booloean value
+     */
+    bool hasSameTile(std::vector<Tile*>& row) const;
+
 
     private:
     // Pointer to the games engine
