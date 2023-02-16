@@ -914,32 +914,20 @@ void GamesEngine::dealGame() {
 }
 
 void GamesEngine::printGameResult() {
-    // Print the final score
-    // std::cout << "Game over" << std::endl;
-    // std::cout << "---------" << std::endl;
-    // std::cout << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
-    // std::cout << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
-    // std::cout << std::endl;
-    // if(player1->getPlayerScore() > player2->getPlayerScore()){
-    //     std::cout << player1->getPlayerName() << " WINS!!" << std::endl;
-    // } else if(player2->getPlayerScore() > player1->getPlayerScore()){
-    //     std::cout << player2->getPlayerName() << " WINS!!" << std::endl;
-    // } else {
-    //     std::cout << "IT'S A TIE!!" << std::endl;
-    // }
-
     std::vector<Player* > players;
     int i = 0;
 
     // Print the final score
     std::cout << "Game over" << std::endl;
     std::cout << "---------" << std::endl;
+    // Push all players into player vector and Print individual scores
     while(i < this->numPlayers) {
         players.push_back(this->activePlayer);
         std::cout << this->activePlayer->getPlayerName() << ": " << this->activePlayer->getPlayerScore() << std::endl;
         updateActivePlayer();
         i++;
     }
+    // Get largest score form the vector
     auto maxIt = std::max_element(players.begin(), players.end(),
     [](Player* a, Player* b) { return a->getPlayerScore() < b->getPlayerScore(); });
     Player& max = *(*maxIt);
