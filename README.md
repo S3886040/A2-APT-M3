@@ -68,7 +68,7 @@ Runs gameplay with 3 players. Loads from saved file and feeds input until gamepl
 
 Multiplayer test command:
 
-./qwirkle < tests/input/Multi_player.input >  tests/actual_outputs/Multi_player.output
+./qwirkle < tests/input/Multi_player.input >  tests/actual_outputs/Multi_player.gameout
 
 
 

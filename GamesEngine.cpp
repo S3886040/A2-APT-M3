@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "RulesEngine.h"
 #include "Player.h"
@@ -484,7 +485,6 @@ void GamesEngine::playerTurn(Player* activePlayer){
                         if(validTile && index <= 5)
                         {
                             BoardLocation& move = convertStringToMove(stringInputForMove);
-                            std::cout << stringInputForMove << std::endl;
 
                             if(re->isPlayerHasTile(this->activePlayer->getPlayerHand(), tile)) {
                             // Process the move and check if it is valid
@@ -505,16 +505,16 @@ void GamesEngine::playerTurn(Player* activePlayer){
                                     this->activePlayer->drawTiles(tileBag, 1);
                                 }
 
-                                // Milestone 3 improvement, board shape will be expanded depending user placement of tiles on board.
-                                if(move.getRow() == boardShape[1] - 1 || (move.getRow() > boardShape[1] && move.getRow() < 26)) {
+                                // Milestone 3 improvement, board shape will be expanded depending on user placement of tiles on board.
+                                if(move.getRow() == boardShape[1] - 1 || (move.getRow() >= boardShape[1] && move.getRow() < 26)) {
                                     if(move.getRow() == 25) {
                                         boardShape[1] = 26;
                                     } else {
                                         boardShape[1] = move.getRow() + 2;
                                     }
                                 } 
-                                
-                                if(move.getCol() == boardShape[0] - 1 || (move.getCol() > boardShape[0] && move.getCol() < 26)) {
+
+                                if(move.getCol() == boardShape[0] - 1 || (move.getCol() >= boardShape[0] && move.getCol() < 26)) {
                                     if(move.getCol() == 25) {
                                         boardShape[0] = 26;
                                     } else {

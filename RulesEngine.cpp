@@ -13,8 +13,6 @@ RulesEngine::RulesEngine() {}
 RulesEngine::RulesEngine(GamesEngine *gamesEngine) {
 
     this->ge = gamesEngine;
-
-
 }
 
 bool RulesEngine::isPlayerHasEnoughTiles(LinkedList *playerHand, const Tile *currentTile) const {
@@ -28,13 +26,9 @@ bool RulesEngine::isPlayerHasEnoughTiles(LinkedList *playerHand, const Tile *cur
             count++;
         }
     }
-
     if (count >= 1) {
-
         playerHas = true;
-
     }
-
     return playerHas;
 }
 
@@ -159,6 +153,7 @@ bool RulesEngine::isAllSameColor(std::vector<Tile*>& row) const {
     if (row.empty()) {
         isSame = true;
     } else{
+        // Will compare all values against the first value of the vector
         char colour = row[0]->colour;
         for (const auto& tile : row) {
             if (tile->colour != colour) {
@@ -174,6 +169,7 @@ bool RulesEngine::isAllSameShape(std::vector<Tile*>& row) const {
     if (row.empty()) {
         isSame = true;
     } else{
+        // Will compare all values against the first value of the vector
         int shape = row[0]->shape;
         for (const auto& tile : row) {
             if (tile->shape != shape) {
@@ -193,10 +189,13 @@ bool RulesEngine::hasSameTile(std::vector<Tile*>& row) const {
         int shape = row[0]->shape;
         char colour = row[0]->colour;
         for (const auto& tile : row) {
+            // Tile values stored as a string and passed to set, which allows no duplicate values
             std::string temp = std::string(1, tile->colour) + std::to_string(tile->shape);
             holder.insert(temp);
         }
         // Compare set size and row size to determine if duplicate exists
+        // As set silently disposes of insert duplicates and stores a pointer in its place
+        // We need to check sizes to evaluate whether duplicate is
         if (holder.size() < row.size()) {
             hasSame = true;
         } 
