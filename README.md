@@ -1,6 +1,6 @@
 # A2-APT
 
-Assignment 2, Advanced Prog. Tech. RMIT 2023
+Assignment 2, MileStone 3,  Advanced Prog. Tech. RMIT 2023
 
 ## Description
 
@@ -32,12 +32,8 @@ To run this game, you need to have a C++ compiler and the standard library.To co
 * Navigate to the repository directory
 * Run the following command to compile the code:
 ```
-g++ -Wall -Werror -std=c++14 -O -o qwirkle TileBag.cpp Tile.cpp BoardLocation.cpp RulesEngine.cpp GamesEngine.cpp LinkedList.cpp  Node.cpp Player.cpp qwirkle.cpp
+g++ -std=c++14 -O -o qwirkle TileBag.cpp Tile.cpp BoardLocation.cpp RulesEngine.cpp GamesEngine.cpp LinkedList.cpp  Node.cpp Player.cpp qwirkle.cpp
 ```
-* Alternatively, you can compile using the provided Makefile:
-```
-make qwirkle
-
 * Run the following command to execute the code:
 ```
 ./qwirkle
@@ -50,9 +46,16 @@ When placing tiles, the player must follow the rules of Qwirkle, which require t
 and match either the color or shape of the adjacent tiles. Points are earned based on the number of tiles placed and the number of lines created. 
 The game continues until all tiles have been placed or the tile bag is empty. The player with the highest score at the end of the game wins.
 
+## AI Gameplay
+
+To play the AI it can be initiated using argument on start command. Simply begin the game with the following command.
+```
+./qwirkle --ai
+```
+
 ## Testing
 
-There are 11 tests that can be run to test various aspects of the game. Below are explanations of the purpose of each test
+There are 2 tests that can be run to test various aspects of the game. Below are explanations of the purpose of each test
 as well as commands used to run them.
 
 AITest: 
@@ -60,16 +63,17 @@ AITest:
 Runs gameplay with an AI. As the AI's moves are predictable given a certain board state. Results will always be identical.
 
 AItest Command:
+```
 ./qwirkle < tests/input/AItest.input > tests/actual_outputs/AItest.gameout
-
+```
 Multi player test: 
 
 Runs gameplay with 3 players. Loads from saved file and feeds input until gameplay has completed.
 
 Multiplayer test command:
-
+```
 ./qwirkle < tests/input/Multi_player.input >  tests/actual_outputs/Multi_player.gameout
-
+```
 
 
 ## Authors
